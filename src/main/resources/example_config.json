@@ -1,0 +1,9 @@
+{
+  "token": "twitch oauth2 token",
+  "client_id": "twitch client id",
+  "client_secret": "twitch client secret",
+  "discord_token": "discord bot token",
+  "bot_ownerid": "discord bot owner id",
+  "server_id": "discord server id",
+  "channel_id": "server channel id"
+}
