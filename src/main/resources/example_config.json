@@ -5,5 +5,14 @@
   "discord_token": "discord bot token",
   "bot_ownerid": "discord bot owner id",
   "server_id": "discord server id",
-  "channel_id": "server channel id"
+  "channel_id": "server channel id",
+  "channels": {
+    "name": ["list of channels for bot to watch"]
+  },
+  "messages": [
+    {
+      "id": "twitch channel if",
+      "data": ["follow msg", "bits msg", "raid msg", "giftbomb msg", "sub msg"]
+    }
+  ]
 }

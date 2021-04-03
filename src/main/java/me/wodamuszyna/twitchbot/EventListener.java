@@ -63,20 +63,21 @@ public class EventListener extends ListenerAdapter {
     @EventSubscriber
     public void onStart(ChannelGoLiveEvent e){
         if(counter != null) {
-            counter.addLog(new Timestamp(System.currentTimeMillis()) + " > Ephymeralis went live: " + e.getStream().getTitle());
+            counter.addLog(new Timestamp(System.currentTimeMillis()) + " > "+e.getChannel().getName()+" went live: " + e.getStream().getTitle());
         }
     }
 
     @EventSubscriber
     public void onEnd(ChannelGoOfflineEvent e){
         if(counter != null) {
-            counter.addLog(new Timestamp(System.currentTimeMillis()) + " > Ephymeralis has ended the stream");
+            counter.addLog(new Timestamp(System.currentTimeMillis()) + " > "+e.getChannel().getName()+" has ended the stream");
         }
     }
 
     @EventSubscriber
     public void onFollow(FollowingEvent e){
-        Main.getClient().getChat().sendMessage("Ephymeralis", "Ephy thanks you for the follow {who}".replace("{who}", e.getData().getDisplayName()));
+        String name = Main.getClient().getChat().getChannelIdToChannelName().get(e.getChannelId());
+        Main.getClient().getChat().sendMessage(name, Config.messages.get(e.getChannelId()).get(0).replace("{who}", e.getData().getDisplayName()));
         if(counter != null) {
             counter.addFollow(e.getData().getDisplayName());
             counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getData().getDisplayName() + " followed");
@@ -85,7 +86,7 @@ public class EventListener extends ListenerAdapter {
 
     @EventSubscriber
     public void onCheer(ChannelBitsEvent e){
-        Main.getClient().getChat().sendMessage("Ephymeralis", "Thank you so much for the bits {person}! Ephy is thankful!".replace("{person}", e.getData().getUserName()));
+        Main.getClient().getChat().sendMessage(e.getData().getChannelName(), Config.messages.get(e.getData().getChannelId()).get(1).replace("{person}", e.getData().getUserName()));
         if(counter != null) {
             counter.addBits(e.getData().getUserName(), e.getData().getBitsUsed());
             counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getData().getUserName() + " cheered " + e.getData().getBitsUsed() + " bits");
@@ -94,7 +95,7 @@ public class EventListener extends ListenerAdapter {
 
     @EventSubscriber
     public void onRaid(RaidEvent e){
-        Main.getClient().getChat().sendMessage("Ephymeralis", "Thank you for the raid {person}! I see you've brought over {number} friends! Welcome!"
+        Main.getClient().getChat().sendMessage(e.getChannel().getName(), Config.messages.get(e.getChannel().getId()).get(2)
                 .replace("{person}", e.getRaider().getName()).replace("{number}", e.getViewers().toString()));
         if(counter != null) {
             counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getRaider().getName() + " raided with " + e.getViewers() + " viewers");
@@ -103,7 +104,7 @@ public class EventListener extends ListenerAdapter {
 
     @EventSubscriber
     public void onSubGiftBomb(GiftSubscriptionsEvent e){
-        Main.getClient().getChat().sendMessage("Ephymeralis", "Thank you for being generous {person}, and gifting {number} subs to the viewers!"
+        Main.getClient().getChat().sendMessage(e.getChannel().getName(), Config.messages.get(e.getChannel().getId()).get(3)
         .replace("{person}", e.getUser().getName()).replace("{number}", e.getCount().toString()));
         if(counter != null) {
             for (int i = 0; i < e.getCount(); i++) {
@@ -123,7 +124,7 @@ public class EventListener extends ListenerAdapter {
 //                counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getData().getUserName() + " gifted a sub to " + e.getData().getRecipientDisplayName());
 //            }
 //        }else {
-            Main.getClient().getChat().sendMessage("Ephymeralis", "Welcome to the sub club, {person}! Enjoy your Ephyrium badge!".replace("{person}", e.getData().getDisplayName()));
+            Main.getClient().getChat().sendMessage(e.getData().getChannelName(), Config.messages.get(e.getData().getChannelId()).get(4).replace("{person}", e.getData().getDisplayName()));
             if (counter != null) {
                 counter.addSub(e.getData().getDisplayName());
                 counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getData().getDisplayName() + " subscribed");
@@ -138,29 +139,29 @@ public class EventListener extends ListenerAdapter {
         if(e.getUser().getName().equalsIgnoreCase("wodamuszyna") || e.getUser().getName().equalsIgnoreCase("ephymeralis")){
             if(cmd.equalsIgnoreCase("!counter")){
                 if(a.length == 1){
-                    Main.getClient().getChat().sendMessage("Ephymeralis", "Correct usage: !counter <start/stop>");
+                    Main.getClient().getChat().sendMessage(e.getChannel().getName(), "Correct usage: !counter <start/stop>");
                     return;
                 }
                 switch (a[1]){
                     case "start":
                         if(counter != null){
-                            Main.getClient().getChat().sendMessage("Ephymeralis", "Counter is already running!");
+                            Main.getClient().getChat().sendMessage(e.getChannel().getName(), "Counter is already running!");
                             break;
                         }
                         counter = new StatCounter();
-                        Main.getClient().getChat().sendMessage("Ephymeralis", "New counter has been started!");
+                        Main.getClient().getChat().sendMessage(e.getChannel().getName(), "New counter has been started!");
                         break;
                     case "stop":
                         if(counter == null){
-                            Main.getClient().getChat().sendMessage("Ephymeralis", "The counter is not running. You can't stop it");
+                            Main.getClient().getChat().sendMessage(e.getChannel().getName(), "The counter is not running. You can't stop it");
                             break;
                         }
                         summarize();
                         counter = null;
-                        Main.getClient().getChat().sendMessage("Ephymeralis", "Counter has been stopped!");
+                        Main.getClient().getChat().sendMessage(e.getChannel().getName(), "Counter has been stopped!");
                         break;
                     default:
-                        Main.getClient().getChat().sendMessage("Ephymeralis", "Correct usage: !counter <start/stop>");
+                        Main.getClient().getChat().sendMessage(e.getChannel().getName(), "Correct usage: !counter <start/stop>");
                         break;
                 }
             }

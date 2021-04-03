@@ -15,7 +15,6 @@ import javax.security.auth.login.LoginException;
 public class Main {
 
     private static TwitchClient client;
-    private static String id = "513126078";
     private static JDA jda = null;
     public static void main(String[] args) {
         Config.init();
@@ -30,12 +29,15 @@ public class Main {
                 .withChatAccount(credential)
                 .build();
 
-        client.getChat().joinChannel("Ephymeralis");
-        client.getPubSub().listenForFollowingEvents(credential, id);
-        client.getPubSub().listenForCheerEvents(credential, id);
-        client.getPubSub().listenForChannelSubGiftsEvents(credential, id);
-        client.getPubSub().listenForSubscriptionEvents(credential, id);
-
+        for(String name : Config.channels){
+            client.getChat().joinChannel(name);
+        }
+        for(String id : Config.messages.keySet()){
+            client.getPubSub().listenForFollowingEvents(credential, id);
+            client.getPubSub().listenForCheerEvents(credential, id);
+            client.getPubSub().listenForChannelSubGiftsEvents(credential, id);
+            client.getPubSub().listenForSubscriptionEvents(credential, id);
+        }
         client.getEventManager().getEventHandler(SimpleEventHandler.class).registerListener(new EventListener());
 
         try {
