@@ -6,18 +6,23 @@ import java.util.HashSet;
 
 public class StatCounter {
 
+    public String channel;
     public ArrayList<String> chatMsgs;
     public HashSet<String> follows;
     public HashSet<String> subs;
     public HashMap<String, Integer> bits;
     public ArrayList<String> logs;
 
-    public StatCounter(){
+    public static ArrayList<StatCounter> counters = new ArrayList<>();
+
+    public StatCounter(String channel){
+        this.channel = channel;
         this.chatMsgs = new ArrayList<>();
         this.follows = new HashSet<>();
         this.subs = new HashSet<>();
         this.bits = new HashMap<>();
         this.logs = new ArrayList<>();
+        addCounter(this);
     }
 
     public void addLog(String msg){
@@ -52,6 +57,10 @@ public class StatCounter {
         return chatMsgs;
     }
 
+    public String getChannel(){ return channel;}
+
+    public void setChannel(String channel){ this.channel = channel; }
+
     public void setChatMsgs(ArrayList<String> chatMsgs) {
         this.chatMsgs = chatMsgs;
     }
@@ -78,5 +87,13 @@ public class StatCounter {
 
     public void setBits(HashMap<String, Integer> bits) {
         this.bits = bits;
+    }
+
+    public void addCounter(StatCounter counter){ counters.add(counter); }
+
+    public ArrayList<StatCounter> getCounters(){ return counters; }
+
+    public static StatCounter get(String name){
+        return counters.stream().filter(counter -> (counter != null && counter.getChannel().equalsIgnoreCase(name))).findFirst().orElse(null);
     }
 }
