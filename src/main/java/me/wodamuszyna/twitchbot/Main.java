@@ -38,13 +38,13 @@ public class Main {
             client.getPubSub().listenForChannelSubGiftsEvents(credential, id);
             client.getPubSub().listenForSubscriptionEvents(credential, id);
         }
-        client.getEventManager().getEventHandler(SimpleEventHandler.class).registerListener(new EventListener());
 
         try {
             jda = JDABuilder.createDefault(Config.discord_token).build();
         } catch (LoginException e) {
             e.printStackTrace();
         }
+        client.getEventManager().getEventHandler(SimpleEventHandler.class).registerListener(new EventListener());
         CommandClientBuilder bd = new CommandClientBuilder();
         bd.setOwnerId(Config.bot_ownerid);
         bd.setPrefix("!");

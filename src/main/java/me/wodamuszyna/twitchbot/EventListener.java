@@ -19,6 +19,8 @@ import java.util.concurrent.TimeUnit;
 public class EventListener extends ListenerAdapter {
 
     StatCounter counter = null;
+    Guild g;
+
     private void summarize(String channel){
         counter = StatCounter.get(channel);
         if(counter != null) {
@@ -33,7 +35,7 @@ public class EventListener extends ListenerAdapter {
             }
 
             if(channel.equalsIgnoreCase("ephymeralis")) {
-                Guild g = Main.getJDA().getGuildById(Config.server_id);
+                g = Main.getJDA().getGuildById(Config.server_id);
                 if (g != null) {
                     TextChannel c = g.getTextChannelById(Config.channel_id);
                     if (c != null) {
@@ -88,6 +90,16 @@ public class EventListener extends ListenerAdapter {
 
     @EventSubscriber
     public void onStart(ChannelGoLiveEvent e){
+        if(e.getChannel().getName().equalsIgnoreCase("ephymeralis")){
+            g = Main.getJDA().getGuildById(Config.server_id);
+            if (g != null) {
+                TextChannel c = g.getTextChannelById(Config.channel_id);
+                if (c != null) {
+                    c.sendMessage("Ephy just went live on Twitch! Join cozy stream here:").complete();
+                    c.sendMessage("https://twitch.tv/ephymeralis").complete();
+                }
+            }
+        }
         counter = StatCounter.get(e.getChannel().getName());
         if(counter != null) {
             counter.addLog(new Timestamp(System.currentTimeMillis()) + " > "+e.getChannel().getName()+" went live: " + e.getStream().getTitle());
