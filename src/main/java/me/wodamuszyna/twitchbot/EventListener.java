@@ -160,21 +160,12 @@ public class EventListener extends ListenerAdapter {
 
     @EventSubscriber
     public void onSub(ChannelSubscribeEvent e){
-//        if(e.getData().getIsGift()){
-//            Main.getClient().getChat().sendMessage("Ephymeralis", "Thank you for being generous {person}, and gifting a sub to {person2}!"
-//            .replace("{person}", e.getData().getUserName()).replace("{person2}", e.getData().getRecipientDisplayName()));
-//            if(counter != null) {
-//                counter.addSub(e.getData().getRecipientDisplayName());
-//                counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getData().getUserName() + " gifted a sub to " + e.getData().getRecipientDisplayName());
-//            }
-//        }else {
             Main.getClient().getChat().sendMessage(e.getData().getChannelName(), Config.messages.get(e.getData().getChannelId()).get(4).replace("{person}", e.getData().getDisplayName()));
             counter = StatCounter.get(e.getData().getChannelName());
             if (counter != null) {
                 counter.addSub(e.getData().getDisplayName());
                 counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getData().getDisplayName() + " subscribed");
             }
-       // }
     }
 
     @EventSubscriber
