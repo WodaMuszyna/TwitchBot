@@ -208,5 +208,4 @@ public class EventListener extends ListenerAdapter {
             counter.addLog(new Timestamp(System.currentTimeMillis()) + " > " + e.getUser().getName() + ": " + e.getMessage());
         }
     }
-
 }
