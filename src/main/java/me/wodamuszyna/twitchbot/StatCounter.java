@@ -61,32 +61,16 @@ public class StatCounter {
 
     public void setChannel(String channel){ this.channel = channel; }
 
-    public void setChatMsgs(ArrayList<String> chatMsgs) {
-        this.chatMsgs = chatMsgs;
-    }
-
     public HashSet<String> getFollows() {
         return follows;
-    }
-
-    public void setFollows(HashSet<String> follows) {
-        this.follows = follows;
     }
 
     public HashSet<String> getSubs() {
         return subs;
     }
 
-    public void setSubs(HashSet<String> subs) {
-        this.subs = subs;
-    }
-
     public HashMap<String, Integer> getBits() {
         return bits;
-    }
-
-    public void setBits(HashMap<String, Integer> bits) {
-        this.bits = bits;
     }
 
     public void addCounter(StatCounter counter){ counters.add(counter); }
