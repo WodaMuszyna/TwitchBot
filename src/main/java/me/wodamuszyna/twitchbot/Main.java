@@ -54,8 +54,6 @@ public class Main {
         jda.addEventListener(new EventListener());
 
     }
-
-
     public static TwitchClient getClient(){ return client;}
     public static JDA getJDA(){ return jda;}
 }
