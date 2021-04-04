@@ -14,6 +14,7 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class EventListener extends ListenerAdapter {
 
@@ -62,6 +63,26 @@ public class EventListener extends ListenerAdapter {
             MessageChannel channel = event.getChannel();
             channel.sendMessage("I like being watered \\*cheep\\*")
                     .complete();
+        }
+        if(event.getChannel().getId().equals(Config.channel_id)){
+            String[] a = msg.getContentRaw().split(" ");
+            if(a[0].equalsIgnoreCase("!say")){
+                msg.delete().complete();
+                if(a.length < 3){
+                    event.getChannel().sendMessage("Command usage: !say <channelname> <message>").complete().delete().queueAfter(10, TimeUnit.SECONDS);
+                    return;
+                }
+                if(!Config.channels.contains(a[1])){
+                    event.getChannel().sendMessage("I'm not in "+a[1]+"'s coop!").complete().delete().queueAfter(10, TimeUnit.SECONDS);
+                    return;
+                }
+                StringBuilder sb = new StringBuilder(a[2]);
+                for(int i=3; i < a.length; ++i){
+                    sb.append(" ").append(a[i]);
+                }
+                event.getChannel().sendMessage("You said: "+sb.toString()+" on "+a[1]+"'s chat").complete().delete().queueAfter(15, TimeUnit.SECONDS);
+                Main.getClient().getChat().sendMessage(a[1], "[Discord] "+event.getAuthor().getName()+" > "+sb.toString());
+            }
         }
     }
 
