@@ -11,9 +11,12 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class EventListener extends ListenerAdapter {
@@ -84,6 +87,47 @@ public class EventListener extends ListenerAdapter {
                 }
                 event.getChannel().sendMessage("You said: "+sb.toString()+" on "+a[1]+"'s chat").complete().delete().queueAfter(15, TimeUnit.SECONDS);
                 Main.getClient().getChat().sendMessage(a[1], "[Discord] "+event.getAuthor().getName()+" > "+sb.toString());
+            }
+            if(a[0].equalsIgnoreCase("!random")){
+                msg.delete().complete();
+                if(a.length < 3){
+                    event.getChannel().sendMessage("Command usage: !random <min> <max>").complete().delete().queueAfter(10, TimeUnit.SECONDS);
+                    return;
+                }
+                Random r = new Random();
+                try {
+                    int min = Integer.parseInt(a[1]);
+                    int max = Integer.parseInt(a[2]);
+                    if(min > max){
+                        event.getChannel().sendMessage("Invalid range!").complete().delete().queueAfter(10, TimeUnit.SECONDS);
+                        return;
+                    }
+                    int res = r.nextInt((max-min)+1)+min;
+                    event.getChannel().sendMessage("Generated number: "+ res).complete().delete().queueAfter(20, TimeUnit.SECONDS);
+                }catch (NumberFormatException ex){
+                    event.getChannel().sendMessage("The arguments must be numbers in integer range!").complete().delete().queueAfter(10, TimeUnit.SECONDS);
+                }
+            }
+            if(a[0].equalsIgnoreCase("!base64")){
+                msg.delete().complete();
+                if(a.length < 3){
+                    event.getChannel().sendMessage("Command usage: !base64 <-e/-d> <text>").complete().delete().queueAfter(10, TimeUnit.SECONDS);
+                    return;
+                }
+                StringBuilder sb = new StringBuilder(a[2]);
+                for(int i=3; i < a.length; ++i){
+                    sb.append(" ").append(a[i]);
+                }
+                switch (a[1]){
+                    case "-e":
+                        event.getChannel().sendMessage("Command output: "+Base64.getEncoder().encodeToString(sb.toString().getBytes(StandardCharsets.UTF_8))).complete().delete().queueAfter(15, TimeUnit.SECONDS);
+                        break;
+                    case "-d":
+                        event.getChannel().sendMessage("Command output: "+new String(Base64.getDecoder().decode(sb.toString()))).complete().delete().queueAfter(15, TimeUnit.SECONDS);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
