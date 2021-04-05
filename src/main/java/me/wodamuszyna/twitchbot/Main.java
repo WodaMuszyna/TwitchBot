@@ -4,8 +4,10 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
-import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import me.wodamuszyna.twitchbot.commands.discord.Base64;
+import me.wodamuszyna.twitchbot.commands.discord.Random;
+import me.wodamuszyna.twitchbot.commands.discord.Say;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -48,10 +50,11 @@ public class Main {
         CommandClientBuilder bd = new CommandClientBuilder();
         bd.setOwnerId(Config.bot_ownerid);
         bd.setPrefix("!");
+        bd.addCommands(new Say(), new Random(), new Base64());
         bd.setActivity(Activity.watching("Ephy watering her crops"));
-        CommandClient client = bd.build();
         jda.getPresence().setActivity(Activity.watching("Ephy watering her crops"));
         jda.addEventListener(new EventListener());
+        jda.addEventListener(bd.build());
 
     }
     public static TwitchClient getClient(){ return client;}

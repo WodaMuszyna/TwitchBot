@@ -69,67 +69,6 @@ public class EventListener extends ListenerAdapter {
             channel.sendMessage("I like being watered \\*cheep\\*")
                     .complete();
         }
-        if(event.getChannel().getId().equals(Config.channel_id)){
-            String[] a = msg.getContentRaw().split(" ");
-            if(a[0].equalsIgnoreCase("!say")){
-                msg.delete().complete();
-                if(a.length < 3){
-                    event.getChannel().sendMessage("Command usage: !say <channelname> <message>").complete().delete().queueAfter(10, TimeUnit.SECONDS);
-                    return;
-                }
-                if(!Config.channels.contains(a[1])){
-                    event.getChannel().sendMessage("I'm not in "+a[1]+"'s coop!").complete().delete().queueAfter(10, TimeUnit.SECONDS);
-                    return;
-                }
-                StringBuilder sb = new StringBuilder(a[2]);
-                for(int i=3; i < a.length; ++i){
-                    sb.append(" ").append(a[i]);
-                }
-                event.getChannel().sendMessage("You said: "+sb.toString()+" on "+a[1]+"'s chat").complete().delete().queueAfter(15, TimeUnit.SECONDS);
-                Main.getClient().getChat().sendMessage(a[1], "[Discord] "+event.getAuthor().getName()+" > "+sb.toString());
-            }
-            if(a[0].equalsIgnoreCase("!random")){
-                msg.delete().complete();
-                if(a.length < 3){
-                    event.getChannel().sendMessage("Command usage: !random <min> <max>").complete().delete().queueAfter(10, TimeUnit.SECONDS);
-                    return;
-                }
-                Random r = new Random();
-                try {
-                    int min = Integer.parseInt(a[1]);
-                    int max = Integer.parseInt(a[2]);
-                    if(min > max){
-                        event.getChannel().sendMessage("Invalid range!").complete().delete().queueAfter(10, TimeUnit.SECONDS);
-                        return;
-                    }
-                    int res = r.nextInt((max-min)+1)+min;
-                    event.getChannel().sendMessage("Generated number: "+ res).complete().delete().queueAfter(20, TimeUnit.SECONDS);
-                }catch (NumberFormatException ex){
-                    event.getChannel().sendMessage("The arguments must be numbers in integer range!").complete().delete().queueAfter(10, TimeUnit.SECONDS);
-                }
-            }
-            if(a[0].equalsIgnoreCase("!base64")){
-                msg.delete().complete();
-                if(a.length < 3){
-                    event.getChannel().sendMessage("Command usage: !base64 <-e/-d> <text>").complete().delete().queueAfter(10, TimeUnit.SECONDS);
-                    return;
-                }
-                StringBuilder sb = new StringBuilder(a[2]);
-                for(int i=3; i < a.length; ++i){
-                    sb.append(" ").append(a[i]);
-                }
-                switch (a[1]){
-                    case "-e":
-                        event.getChannel().sendMessage("Command output: "+Base64.getEncoder().encodeToString(sb.toString().getBytes(StandardCharsets.UTF_8))).complete().delete().queueAfter(15, TimeUnit.SECONDS);
-                        break;
-                    case "-d":
-                        event.getChannel().sendMessage("Command output: "+new String(Base64.getDecoder().decode(sb.toString()))).complete().delete().queueAfter(15, TimeUnit.SECONDS);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
     }
 
     @EventSubscriber
