@@ -8,6 +8,7 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import me.wodamuszyna.twitchbot.commands.discord.Base64;
 import me.wodamuszyna.twitchbot.commands.discord.Random;
 import me.wodamuszyna.twitchbot.commands.discord.Say;
+import me.wodamuszyna.twitchbot.commands.twitch.ICommandManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -20,6 +21,8 @@ public class Main {
     private static JDA jda = null;
     public static void main(String[] args) {
         Config.init();
+        ICommandManager.init();
+        Runtime.getRuntime().addShutdownHook(new ICommandManager.SaveThread());
         TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
         OAuth2Credential credential = new OAuth2Credential("twitch", Config.token);
         client = clientBuilder

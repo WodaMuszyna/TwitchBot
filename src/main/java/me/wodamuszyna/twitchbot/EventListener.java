@@ -2,9 +2,13 @@ package me.wodamuszyna.twitchbot;
 
 import com.github.philippheuer.events4j.simple.domain.EventSubscriber;
 import com.github.twitch4j.chat.events.channel.*;
+import com.github.twitch4j.common.enums.CommandPermission;
 import com.github.twitch4j.events.ChannelGoLiveEvent;
 import com.github.twitch4j.events.ChannelGoOfflineEvent;
 import com.github.twitch4j.pubsub.events.*;
+import me.wodamuszyna.twitchbot.commands.twitch.ICommand;
+import me.wodamuszyna.twitchbot.commands.twitch.ICommandManager;
+import me.wodamuszyna.twitchbot.commands.twitch.impl.Command;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -14,9 +18,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Base64;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class EventListener extends ListenerAdapter {
@@ -183,6 +185,19 @@ public class EventListener extends ListenerAdapter {
                     default:
                         Main.getClient().getChat().sendMessage(e.getChannel().getName(), "Correct usage: !counter <start/stop>");
                         break;
+                }
+            }
+        }
+        if(cmd.equalsIgnoreCase("!command")){
+            Command.execute(e.getUser(), e.getChannel().getName(), a);
+            return;
+        }
+        if(cmd.startsWith("!")) {
+            ICommand command = ICommandManager.get(cmd);
+            if (command != null) {
+                if (e.getPermissions().contains(CommandPermission.valueOf(command.getPermission().toUpperCase(Locale.ROOT)))) {
+                    Main.getClient().getChat().sendMessage(e.getChannel().getName(), command.getMessage());
+                    return;
                 }
             }
         }
