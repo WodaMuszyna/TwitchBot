@@ -27,6 +27,11 @@ public class Command {
                 }
                 cmd = a[2];
                 if(!cmd.startsWith("!")) cmd = "!"+cmd;
+                command = ICommandManager.get(channel, cmd);
+                if(command != null){
+                    Main.getClient().getChat().sendMessage(channel, "Command {0} already exists".replace("{0}", cmd));
+                    break;
+                }
                 if(a[3].startsWith("-p")){
                     perm = a[3].split("=")[1].toUpperCase(Locale.ROOT);
                     if(!isValid(perm)){
@@ -37,13 +42,13 @@ public class Command {
                     for(int i=5; i < a.length; ++i){
                         sb.append(" ").append(a[i]);
                     }
-                    new ICommand(cmd, perm, sb.toString());
+                    new ICommand(channel, cmd, perm, sb.toString());
                 }else{
                     StringBuilder sb = new StringBuilder(a[3]);
                     for(int i=4; i < a.length; ++i){
                         sb.append(" ").append(a[i]);
                     }
-                    new ICommand(cmd, perm, sb.toString());
+                    new ICommand(channel, cmd, perm, sb.toString());
                 }
                 Main.getClient().getChat().sendMessage(channel, "Successfully added command {0}".replace("{0}", cmd));
                 break;
@@ -54,7 +59,7 @@ public class Command {
                 }
                 cmd = a[2];
                 if(!cmd.startsWith("!")) cmd = "!"+cmd;
-                command = ICommandManager.get(cmd);
+                command = ICommandManager.get(channel, cmd);
                 if(command == null){
                     Main.getClient().getChat().sendMessage(channel, "Command {0} does not exist".replace("{0}", cmd));
                     break;
@@ -69,15 +74,15 @@ public class Command {
                     for(int i=5; i < a.length; ++i){
                         sb.append(" ").append(a[i]);
                     }
-                    ICommandManager.removeCommand(command);
-                    new ICommand(cmd, perm, sb.toString());
+                    ICommandManager.removeCommand(channel, command);
+                    new ICommand(channel, cmd, perm, sb.toString());
                 }else{
                     StringBuilder sb = new StringBuilder(a[3]);
                     for(int i=4; i < a.length; ++i){
                         sb.append(" ").append(a[i]);
                     }
-                    ICommandManager.removeCommand(command);
-                    new ICommand(cmd, perm, sb.toString());
+                    ICommandManager.removeCommand(channel, command);
+                    new ICommand(channel, cmd, perm, sb.toString());
                 }
                 Main.getClient().getChat().sendMessage(channel, "Successfully edited command {0}".replace("{0}", cmd));
                 break;
@@ -88,17 +93,17 @@ public class Command {
                 }
                 cmd = a[2];
                 if(!cmd.startsWith("!")) cmd = "!"+cmd;
-                command = ICommandManager.get(cmd);
+                command = ICommandManager.get(channel, cmd);
                 if(command == null){
                     Main.getClient().getChat().sendMessage(channel, "Command {0} does not exist".replace("{0}", cmd));
                     break;
                 }
-                ICommandManager.removeCommand(command);
+                ICommandManager.removeCommand(channel, command);
                 Main.getClient().getChat().sendMessage(channel, "Successfully removed command {0}".replace("{0}", cmd));
                 break;
             case "list":
-                StringBuilder res = new StringBuilder(ICommandManager.getCommands().get(0).getName());
-                List<ICommand> cmds = ICommandManager.getCommands();
+                StringBuilder res = new StringBuilder(ICommandManager.getCommands(channel).get(0).getName());
+                List<ICommand> cmds = ICommandManager.getCommands(channel);
                 for(int i=1; i < cmds.size(); i++){
                     res.append(", ").append(cmds.get(i).getName());
                 }

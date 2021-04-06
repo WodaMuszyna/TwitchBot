@@ -5,11 +5,11 @@ public class ICommand {
     public String permission;
     public String message;
 
-    public ICommand(String name, String permission, String message){
+    public ICommand(String channel, String name, String permission, String message){
         this.name = name;
         this.permission = permission;
         this.message = message;
-        ICommandManager.addCommand(this);
+        ICommandManager.addCommand(channel,this);
     }
 
     public String getName() {

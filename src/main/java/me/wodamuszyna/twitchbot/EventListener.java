@@ -193,7 +193,7 @@ public class EventListener extends ListenerAdapter {
             return;
         }
         if(cmd.startsWith("!")) {
-            ICommand command = ICommandManager.get(cmd);
+            ICommand command = ICommandManager.get(e.getChannel().getName(), cmd);
             if (command != null) {
                 if (e.getPermissions().contains(CommandPermission.valueOf(command.getPermission().toUpperCase(Locale.ROOT)))) {
                     Main.getClient().getChat().sendMessage(e.getChannel().getName(), command.getMessage());

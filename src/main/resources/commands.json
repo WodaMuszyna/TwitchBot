@@ -1,1 +1,19 @@
-[{"name":"!test","permission":"moderator","message":"test test 123"},{"name":"!asdasd","permission":"everyone","message":"test test asdasdasd"},{"name":"!hmm","permission":"MODERATOR","message":"wow its going gut LUL"}]
+{
+  "commands": [
+    {
+      "channel": "wodamuszyna",
+      "data": [
+        {
+          "name": "!test",
+          "permission": "moderator",
+          "message": "asdasdasdasd"
+        },
+        {
+          "name": "!lol",
+          "permission": "EVERYONE",
+          "message": "idk LUL"
+        }
+      ]
+    }
+  ]
+}
