@@ -157,7 +157,7 @@ public class EventListener extends ListenerAdapter {
     public void onChat(ChannelMessageEvent e){
         String[] a = e.getMessage().split(" ");
         String cmd = a[0];
-        if(e.getUser().getName().equalsIgnoreCase("wodamuszyna") || e.getUser().getName().equalsIgnoreCase("ephymeralis")){
+        if(e.getPermissions().contains(CommandPermission.MODERATOR)){
             if(cmd.equalsIgnoreCase("!counter")){
                 counter = StatCounter.get(e.getChannel().getName());
                 if(a.length == 1){
@@ -187,10 +187,10 @@ public class EventListener extends ListenerAdapter {
                         break;
                 }
             }
-        }
-        if(cmd.equalsIgnoreCase("!command")){
-            Command.execute(e.getUser(), e.getChannel().getName(), a);
-            return;
+            if(cmd.equalsIgnoreCase("!command")){
+                Command.execute(e.getUser(), e.getChannel().getName(), a);
+                return;
+            }
         }
         if(cmd.startsWith("!")) {
             ICommand command = ICommandManager.get(e.getChannel().getName(), cmd);

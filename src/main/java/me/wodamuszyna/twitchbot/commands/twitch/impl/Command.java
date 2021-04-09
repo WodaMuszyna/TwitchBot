@@ -104,6 +104,10 @@ public class Command {
             case "list":
                 StringBuilder res = new StringBuilder(ICommandManager.getCommands(channel).get(0).getName());
                 List<ICommand> cmds = ICommandManager.getCommands(channel);
+                if(cmds.size() < 1){
+                    Main.getClient().getChat().sendMessage(channel, "No commands found for this channel");
+                    break;
+                }
                 for(int i=1; i < cmds.size(); i++){
                     res.append(", ").append(cmds.get(i).getName());
                 }

@@ -39,7 +39,7 @@ public class Config {
         }
         if(path != null)
         path = path.substring(0, path.lastIndexOf("/"));
-        File file = new File(path+"/config.json");
+        File file = new File(path+File.separator+"config.json");
 
         if(file.exists()){
             try {
@@ -65,6 +65,10 @@ public class Config {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            System.out.println("CONFIG FILE NOT FOUND");
+            System.out.println("RENAME EXAMPLE_CONFIG.JSON TO CONFIG.JSON AND FILL UP");
+            System.exit(0);
         }
     }
 }

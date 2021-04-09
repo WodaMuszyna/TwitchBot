@@ -31,13 +31,12 @@ public class ICommandManager {
         }
         if(path != null)
             path = path.substring(0, path.lastIndexOf("/"));
-        file = new File(path+"/commands.json");
-
+        file = new File(path+File.separator+"commands.json");
         if(!file.exists()){
             try {
                 if(file.createNewFile()){
                     FileWriter fw = new FileWriter(file);
-                    fw.write("{\"commands\": []}");
+                    fw.write(gson.toJson(new ICommandConfig()));
                     fw.close();
                 }
             } catch (IOException e) {
